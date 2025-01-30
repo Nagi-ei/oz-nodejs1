@@ -1,61 +1,46 @@
 // server.js
-
-const http = require('http');
-
-// CORS 설정을 위한 헤더
-const headers = {
-  'Access-Control-Allow-Origin': "http://127.0.0.1:9000",
-  'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+const express = require('express');
+const cors = require('cors');
+const app = express();
 
 let data = { message: '여러분 화이팅!' };
 
-const server = http.createServer((req, res) => {
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204, headers);
-    res.end();
-    return;
-  }
+app.use(
+  cors({
+    origin: 'http://127.0.0.1:5500',
+    headers: ['OPTIONS', 'POST', 'GET', 'PUT', 'DELETE'],
+  })
+);
 
-  if (req.method === 'GET') {
-    res.writeHead(200, { 'Content-Type': 'application/json', ...headers });
-    res.end(JSON.stringify(data));
-  }
+// GET에서 json 쓰는데 왜 없어도 가능? 요청하는 본문이 아니라서?
+// app.use(express.json());
+app.use(express.text());
 
-  if (req.method === 'POST') {
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk.toString();
-    });
+// options?
+// app.options('/', (req, res) => {
+//   res.send();
+// });
 
-    req.on('end', () => {
-      data.message = body;
-      res.writeHead(200, headers);
-      res.end(`받은 POST 데이터: ${body}`);
-    });
-  }
-
-  if (req.method === 'PUT') {
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk.toString();
-    });
-
-    req.on('end', () => {
-      data.message = body;
-      res.writeHead(200, headers);
-      res.end(`업데이트된 데이터: ${body}`);
-    });
-  }
-
-  if (req.method === 'DELETE') {
-    data = {};
-    res.writeHead(200, headers);
-    res.end('데이터가 삭제되었습니다.');
-  }
+app.get('/', (req, res) => {
+  res.json(data);
 });
 
-server.listen(3000, () => {
-  console.log('서버가 http://localhost:3000/ 에서 실행 중입니다.');
+// POST 없음
+// app.post('/', (req, res) => {
+//   data.message = req.body;
+//   res.send(data);
+// });
+
+app.put('/', (req, res) => {
+  data.message = req.body;
+  res.send(`업데이트된 데이터: ${data.message}`);
+});
+
+app.delete('/', (req, res) => {
+  data.message = '';
+  res.send('데이터가 삭제되었습니다.');
+});
+
+app.listen(3000, () => {
+  console.log('서버가 http://localhost:3000 에서 실행 중입니다.');
 });

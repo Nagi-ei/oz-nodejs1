@@ -1,0 +1,24 @@
+{
+  "name": "oz-nodejs1",
+  "version": "1.0.0",
+  "description": "oz nodejs day2 assignment",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Nagi-ei/oz-nodejs1.git"
+  },
+  "author": "Nagi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nagi-ei/oz-nodejs1/issues"
+  },
+  "homepage": "https://github.com/Nagi-ei/oz-nodejs1#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
